@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MySummerVillage - Официальный сайт</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet" />
+    <style>
+        @keyframes moveBackground {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: -1000% -1000%;
+            }
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('images/background.jpg');
+            background-size: 120% 120%; /* Увеличиваем размер фона для плавного движения */
+            background-attachment: fixed;
+            background-position: 0% 0%;
+            animation: moveBackground 120s linear infinite; /* Медленная анимация с бесконечным повторением */
+            font-family: Arial, sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 4px solid #8B4513;
+            border-radius: 15px;
+            max-width: 800px;
+            margin: 40px 20px 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            font-family: 'Permanent Marker', cursive;
+            color: #FFD700;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .container h1 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .container p {
+            font-size: 20px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 300px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+        .social-panel {
+            background: linear-gradient(90deg, #ff9800, #ffc107);
+            border-radius: 15px;
+            max-width: 800px;
+            margin: 10px 20px 40px;
+            padding: 20px 30px;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.9);
+            font-family: 'Permanent Marker', cursive;
+            color: #000;
+            font-size: 22px;
+            text-align: center;
+            user-select: none;
+        }
+        .social-panel a {
+            color: #000;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .social-panel a:hover {
+            text-decoration: underline;
+        }
+        .social-panel .label {
+            font-size: 26px;
+            margin-bottom: 10px;
+            display: block;
+            color: #3e2723;
+            text-shadow: 1px 1px 0 #fff;
+        }
+        .guide {
+            background-color: rgba(0,0,0,0.8);
+            border: 4px solid #FFD700;
+            border-radius: 15px;
+            max-width: 800px;
+            margin: 0 20px 40px;
+            padding: 25px 40px;
+            box-shadow: 0 0 25px #FFD700;
+            font-family: 'Permanent Marker', cursive;
+            color: #FFD700;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .guide h2 {
+            font-size: 32px;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .guide ol {
+            font-size: 20px;
+            line-height: 1.6;
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        .guide li {
+            margin-bottom: 30px;
+        }
+        .guide li a {
+            color: #FFD700;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .guide li img {
+            display: block;
+            max-width: 100%;
+            margin-top: 12px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+        #download-archive {
+            background-color: rgba(255, 215, 0, 0.9);
+            color: #3e2723;
+            font-family: 'Permanent Marker', cursive;
+            border-radius: 15px;
+            padding: 30px 40px;
+            max-width: 800px;
+            box-shadow: 0 0 30px #FFD700;
+            margin: 40px 20px 80px;
+            text-align: center;
+            user-select: none;
+        }
+        #download-archive h3 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px #000;
+        }
+        #download-archive a.button-download {
+            display: inline-block;
+            background-color: #8B4513;
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 22px;
+            padding: 15px 35px;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 0 15px #8B4513;
+            transition: background-color 0.3s ease;
+        }
+        #download-archive a.button-download:hover {
+            background-color: #5a2d00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="images/GameLogo.jpg" alt="MySummerVillage Logo" />
+        </div>
+
+        <h1>Добро пожаловать на сайт игры MySummerVillage!</h1>
+
+        <p>Здесь вы сможете подробно ознакомиться с игрой, узнать все её особенности и посмотреть полезные гайды по установке и прочему.</p>
+
+        <p>Кроме того, на нашем сайте будет эксклюзивная информация, доступная только здесь: новости о разработке, советы от создателей и уникальные материалы, которые вы не найдёте больше нигде.</p>
+
+        <p>Следите за обновлениями и будьте в курсе всех новинок MySummerVillage!</p>
+    </div>
+
+    <div class="social-panel">
+        <span class="label">Соц-сети:</span>
+        Telegram — <a href="https://t.me/Koluchin69" target="_blank" rel="noopener noreferrer">t.me/Koluchin69</a><br />
+        TikTok — <a href="https://www.tiktok.com/@koluchin666?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer">koluchin666</a><br />
+        YouTube — <a href="https://youtube.com/channel/UCBo4W3z1twl5iP_u0lBnH1A?feature=shared" target="_blank" rel="noopener noreferrer">MySummerVillage</a><br />
+        Discord — <a href="https://discord.gg/e9tDvPCu" target="_blank" rel="noopener noreferrer">Discord сервер</a>
+    </div>
+
+    <div class="guide">
+        <h2>Гайд: Как скачать игру</h2>
+        <ol>
+            <li>
+                Скачайте WinRar по этой ссылке — <a href="https://www.win-rar.com/start.html?&L=4" target="_blank" rel="noopener noreferrer">скачать WinRar</a><br />
+                <img src="images/guide1.jpg" alt="Guide Step 1" />
+            </li>
+            <li>
+                Скачайте архив с игрой по этим ссылкам — 
+                <a href="#download-archive">перейти к скачиванию ↓</a> |
+                <a href="Files/MySummerVillageArchive.rar" download>скачать архив напрямую</a><br />
+                <img src="images/guide2.jpg" alt="Guide Step 2" />
+            </li>
+            <li>
+                Распакуйте архив и запустите файл <code>readme.txt</code>, там будет вся информация.<br />
+                <img src="images/guide3.jpg" alt="Guide Step 3" />
+            </li>
+        </ol>
+    </div>
+
+    <div id="download-archive">
+        <h3>Скачать архив с игрой</h3>
+        <a href="Files/MySummerVillageArchive.rar" download class="button-download">Скачать архив с игрой</a>
+    </div>
+</body>
+</html>
