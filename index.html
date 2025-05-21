@@ -206,7 +206,7 @@
             background-color: #000;
         }
         
-        .gallery-frame img {
+        .gallery-frame img, .gallery-frame video {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -218,23 +218,23 @@
             transition: opacity 1s ease-in-out;
         }
         
-        .gallery-frame img.active {
+        .gallery-frame img.active, .gallery-frame video.active {
             opacity: 1;
             z-index: 1;
         }
         
-        .gallery-frame img.next {
+        .gallery-frame img.next, .gallery-frame video.next {
             opacity: 0;
             z-index: 0;
         }
         
-        .gallery-frame img.fade-out {
+        .gallery-frame img.fade-out, .gallery-frame video.fade-out {
             opacity: 0;
             z-index: 2;
             transition: opacity 1s ease-in-out;
         }
         
-        .gallery-frame img.fade-in {
+        .gallery-frame img.fade-in, .gallery-frame video.fade-in {
             opacity: 1;
             z-index: 1;
             transition: opacity 1s ease-in-out;
@@ -317,61 +317,197 @@
     </div>
 
     <script>
-        // Функция для плавной смены изображений
-        function setupImageRotation(frameId, prefix, totalImages, startIndex) {
+        // Функция для плавной смены изображений и видео
+        function setupMediaRotation(frameId, prefix, totalMedia, startIndex, usedIndices) {
             const frame = document.getElementById(frameId);
             let currentIndex = startIndex;
-            let currentImage = document.createElement('img');
-            let nextImage = document.createElement('img');
+            let mediaType = "";
+            let currentMedia = null;
+            let nextMedia = null;
             
-            // Начальное изображение
-            currentImage.src = `images/${prefix}${currentIndex}.jpg`;
-            currentImage.className = 'active';
-            frame.appendChild(currentImage);
-            
-            // Следующее изображение (скрытое)
-            nextImage.className = 'next';
-            frame.appendChild(nextImage);
-            
-            // Функция для смены изображений
-            function rotateImages() {
-                // Вычисляем индекс следующего изображения
-                currentIndex = (currentIndex + 1) % totalImages;
-                if (currentIndex === 0) currentIndex = 1; // Избегаем 0 индекса
+            // Определяем тип медиа (изображение или видео) и создаем элемент
+            function createMediaElement(index) {
+                // Проверим сначала наличие видео
+                const videoElement = document.createElement('video');
+                videoElement.src = `images/${prefix}${index}.mp4`;
+                videoElement.muted = true; // Видео будет без звука
+                videoElement.loop = true;
+                videoElement.playsInline = true;
                 
-                // Устанавливаем источник для следующего изображения
-                nextImage.src = `images/${prefix}${currentIndex}.jpg`;
-                
-                // Добавляем классы для анимации
-                currentImage.className = 'fade-out';
-                nextImage.className = 'fade-in';
-                
-                // Переключаем изображения после завершения анимации
-                setTimeout(() => {
-                    // Меняем местами ссылки на изображения
-                    let temp = currentImage;
-                    currentImage = nextImage;
-                    nextImage = temp;
+                return new Promise((resolve) => {
+                    videoElement.onloadeddata = function() {
+                        resolve({type: 'video', element: videoElement});
+                    };
                     
-                    // Сбрасываем классы
-                    currentImage.className = 'active';
-                    nextImage.className = 'next';
-                }, 1000);
+                    videoElement.onerror = function() {
+                        // Если видео не найдено, пробуем изображение
+                        const imgElement = document.createElement('img');
+                        imgElement.src = `images/${prefix}${index}.jpg`;
+                        
+                        imgElement.onload = function() {
+                            resolve({type: 'image', element: imgElement});
+                        };
+                        
+                        imgElement.onerror = function() {
+                            // Если и изображение не найдено, возвращаем null
+                            resolve({type: null, element: null});
+                        };
+                    };
+                    
+                    // Попытка загрузить видео
+                    videoElement.load();
+                });
             }
             
-            // Запускаем ротацию с случайной задержкой для каждой рамки
-            return setInterval(rotateImages, 5000 + Math.random() * 2000);
+            // Функция для выбора следующего индекса (избегая дублирования)
+            function getNextUniqueIndex() {
+                // Создаем массив доступных индексов (исключая текущие использованные)
+                let availableIndices = [];
+                for (let i = 1; i <= totalMedia; i++) {
+                    if (!usedIndices.includes(i)) {
+                        availableIndices.push(i);
+                    }
+                }
+                
+                // Если все индексы используются, позволяем выбрать любой, кроме текущего
+                if (availableIndices.length === 0) {
+                    for (let i = 1; i <= totalMedia; i++) {
+                        if (i !== currentIndex) {
+                            availableIndices.push(i);
+                        }
+                    }
+                }
+                
+                // Выбираем случайный индекс из доступных
+                const randomIndex = Math.floor(Math.random() * availableIndices.length);
+                return availableIndices[randomIndex];
+            }
+            
+            // Инициализация первого медиа
+            async function initializeMedia() {
+                const result = await createMediaElement(currentIndex);
+                if (result.type) {
+                    currentMedia = result.element;
+                    mediaType = result.type;
+                    
+                    currentMedia.className = 'active';
+                    frame.appendChild(currentMedia);
+                    
+                    // Если это видео, запускаем его
+                    if (mediaType === 'video') {
+                        currentMedia.play().catch(e => console.error("Не удалось воспроизвести видео:", e));
+                    }
+                    
+                    // Создаем следующий элемент (пока скрытый)
+                    nextMedia = document.createElement(mediaType === 'video' ? 'video' : 'img');
+                    nextMedia.className = 'next';
+                    if (mediaType === 'video') {
+                        nextMedia.muted = true;
+                        nextMedia.loop = true;
+                        nextMedia.playsInline = true;
+                    }
+                    frame.appendChild(nextMedia);
+                    
+                    // Запускаем ротацию
+                    setTimeout(rotateMedia, 5000 + Math.random() * 2000);
+                }
+            }
+            
+            // Функция для смены медиа
+            async function rotateMedia() {
+                // Удаляем текущий индекс из общего списка
+                const currentPosition = usedIndices.indexOf(currentIndex);
+                if (currentPosition > -1) {
+                    usedIndices.splice(currentPosition, 1);
+                }
+                
+                // Выбираем новый уникальный индекс
+                currentIndex = getNextUniqueIndex();
+                
+                // Добавляем новый индекс в список используемых
+                usedIndices.push(currentIndex);
+                
+                // Определяем тип нового медиа
+                const result = await createMediaElement(currentIndex);
+                if (result.type) {
+                    // Если тип медиа изменился, меняем элемент
+                    if (result.type !== mediaType) {
+                        nextMedia.remove();
+                        nextMedia = result.element;
+                        nextMedia.className = 'next';
+                        frame.appendChild(nextMedia);
+                        mediaType = result.type;
+                    } else {
+                        // Иначе просто обновляем источник
+                        if (mediaType === 'video') {
+                            nextMedia.src = `images/${prefix}${currentIndex}.mp4`;
+                            nextMedia.load();
+                        } else {
+                            nextMedia.src = `images/${prefix}${currentIndex}.jpg`;
+                        }
+                    }
+                    
+                    // Добавляем классы для анимации
+                    currentMedia.className = 'fade-out';
+                    nextMedia.className = 'fade-in';
+                    
+                    // Если текущее медиа видео, останавливаем его
+                    if (currentMedia.tagName === 'VIDEO') {
+                        currentMedia.pause();
+                    }
+                    
+                    // Если новое медиа видео, запускаем его
+                    if (nextMedia.tagName === 'VIDEO') {
+                        nextMedia.play().catch(e => console.error("Не удалось воспроизвести видео:", e));
+                    }
+                    
+                    // Переключаем медиа после завершения анимации
+                    setTimeout(() => {
+                        // Меняем местами ссылки на медиа
+                        let temp = currentMedia;
+                        currentMedia = nextMedia;
+                        nextMedia = temp;
+                        
+                        // Сбрасываем классы
+                        currentMedia.className = 'active';
+                        nextMedia.className = 'next';
+                        
+                        // Запускаем следующую ротацию
+                        setTimeout(rotateMedia, 5000 + Math.random() * 2000);
+                    }, 1000);
+                } else {
+                    // Если медиа не найдено, пробуем еще раз
+                    setTimeout(rotateMedia, 1000);
+                }
+            }
+            
+            // Запускаем инициализацию
+            initializeMedia();
         }
         
         // Настраиваем ротацию для каждой рамки
-        // Предположим, что у нас всего 6 изображений с именами community1.jpg, community2.jpg, ... community6.jpg
-        const totalCommunityImages = 6; // Измените это число при добавлении большего количества изображений
+        // Предположим, что у нас всего 10 медиа-файлов (изображения и/или видео)
+        const totalCommunityMedia = 10; // Измените это число при добавлении большего количества медиа
+        
+        // Список для отслеживания используемых индексов (чтобы избежать дублирования)
+        let usedIndices = [];
         
         // Запускаем ротацию с разными начальными индексами
         document.addEventListener('DOMContentLoaded', () => {
-            setupImageRotation('frame1', 'community', totalCommunityImages, 1);
-            setupImageRotation('frame2', 'community', totalCommunityImages, Math.floor(Math.random() * totalCommunityImages) + 1);
-            setupImageRotation('frame3', 'community', totalCommunityImages, Math.floor(Math.random() * totalCommunityImages) + 1);
+            // Выбираем три разных начальных индекса
+            let indices = [];
+            while (indices.length < 3) {
+                const randomIndex = Math.floor(Math.random() * totalCommunityMedia) + 1;
+                if (!indices.includes(randomIndex)) {
+                    indices.push(randomIndex);
+                    usedIndices.push(randomIndex); // Добавляем в список используемых
+                }
+            }
+            
+            // Запускаем ротацию для каждой рамки
+            setupMediaRotation('frame1', 'community', totalCommunityMedia, indices[0], usedIndices);
+            setupMediaRotation('frame2', 'community', totalCommunityMedia, indices[1], usedIndices);
+            setupMediaRotation('frame3', 'community', totalCommunityMedia, indices[2], usedIndices);
         });
     </script>
 </body>
