@@ -17,21 +17,28 @@
             }
         }
         
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        
         body {
             margin: 0;
             padding: 0;
             background-image: url('images/background.jpg');
-            background-size: 120% 120%; /* Увеличиваем размер фона для плавного движения */
+            background-size: 120% 120%;
             background-attachment: fixed;
             background-position: 0% 0%;
-            animation: moveBackground 120s linear infinite; /* Медленная анимация с бесконечным повторением */
+            animation: moveBackground 120s linear infinite;
             font-family: Arial, sans-serif;
             color: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            position: relative;
         }
+        
         .container {
             background-color: rgba(0, 0, 0, 0.7);
             border: 4px solid #8B4513;
@@ -44,27 +51,32 @@
             color: #FFD700;
             text-shadow: 1px 1px 2px #000;
         }
+        
         .container h1 {
             font-size: 36px;
             text-align: center;
             margin-bottom: 30px;
             text-shadow: 2px 2px 4px #000;
         }
+        
         .container p {
             font-size: 20px;
             line-height: 1.6;
             margin-bottom: 20px;
         }
+        
         .logo {
             text-align: center;
             margin-bottom: 20px;
         }
+        
         .logo img {
             max-width: 300px;
             height: auto;
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
         }
+        
         .social-panel {
             background: linear-gradient(90deg, #ff9800, #ffc107);
             border-radius: 15px;
@@ -78,15 +90,18 @@
             text-align: center;
             user-select: none;
         }
+        
         .social-panel a {
             color: #000;
             font-weight: bold;
             text-decoration: none;
             margin: 0 10px;
         }
+        
         .social-panel a:hover {
             text-decoration: underline;
         }
+        
         .social-panel .label {
             font-size: 26px;
             margin-bottom: 10px;
@@ -94,6 +109,7 @@
             color: #3e2723;
             text-shadow: 1px 1px 0 #fff;
         }
+        
         .guide {
             background-color: rgba(0,0,0,0.8);
             border: 4px solid #FFD700;
@@ -106,26 +122,31 @@
             color: #FFD700;
             text-shadow: 1px 1px 2px #000;
         }
+        
         .guide h2 {
             font-size: 32px;
             margin-bottom: 25px;
             text-align: center;
             text-shadow: 2px 2px 4px #000;
         }
+        
         .guide ol {
             font-size: 20px;
             line-height: 1.6;
             padding-left: 20px;
             margin-bottom: 0;
         }
+        
         .guide li {
             margin-bottom: 30px;
         }
+        
         .guide li a {
             color: #FFD700;
             font-weight: bold;
             text-decoration: underline;
         }
+        
         .guide li img {
             display: block;
             max-width: 100%;
@@ -133,6 +154,7 @@
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
         }
+        
         #download-archive {
             background-color: rgba(255, 215, 0, 0.9);
             color: #3e2723;
@@ -145,11 +167,13 @@
             text-align: center;
             user-select: none;
         }
+        
         #download-archive h3 {
             font-size: 28px;
             margin-bottom: 25px;
             text-shadow: 1px 1px 2px #000;
         }
+        
         #download-archive a.button-download {
             display: inline-block;
             background-color: #8B4513;
@@ -162,17 +186,17 @@
             box-shadow: 0 0 15px #8B4513;
             transition: background-color 0.3s ease;
         }
+        
         #download-archive a.button-download:hover {
             background-color: #5a2d00;
         }
         
-        /* Стили для секции работ сообщества */
         .community-works {
             background-color: rgba(0, 0, 0, 0.8);
             border: 4px solid #FFD700;
             border-radius: 15px;
             max-width: 800px;
-            margin: 0 20px 80px;
+            margin: 0 20px 40px;
             padding: 25px 40px;
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
             font-family: 'Permanent Marker', cursive;
@@ -240,6 +264,41 @@
             transition: opacity 1s ease-in-out;
         }
         
+        /* Плейсхолдер для загрузки */
+        .gallery-frame::before {
+            content: 'Загрузка...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFD700;
+            font-family: 'Permanent Marker', cursive;
+            font-size: 18px;
+            z-index: 0;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gallery-frame.loaded::before {
+            opacity: 0;
+        }
+        
+        /* Футер */
+        .footer {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #FFD700;
+            text-align: center;
+            padding: 15px 0;
+            font-family: 'Permanent Marker', cursive;
+            font-size: 16px;
+            margin-top: 40px;
+            border-top: 2px solid #8B4513;
+            position: relative;
+            bottom: 0;
+            z-index: 10;
+        }
+        
         /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
             .gallery-container {
@@ -251,6 +310,11 @@
                 width: 90%;
                 height: 200px;
                 margin-bottom: 15px;
+            }
+            
+            .footer {
+                font-size: 14px;
+                padding: 12px 0;
             }
         }
     </style>
@@ -316,169 +380,242 @@
         </div>
     </div>
 
+    <div class="footer">
+        © 2025 Koluchin6Company. Все права защищены.
+    </div>
+
     <script>
+        // Фиксируем начальную позицию страницы сверху
+        window.addEventListener('load', function() {
+            window.scrollTo(0, 0);
+        });
+
         // Функция для плавной смены изображений и видео
-        function setupMediaRotation(frameId, prefix, totalMedia, startIndex, usedIndices) {
+        function setupMediaRotation(frameId, prefix, totalMedia, startIndex, usedIndicesGlobal) {
             const frame = document.getElementById(frameId);
             let currentIndex = startIndex;
             let mediaType = "";
             let currentMedia = null;
             let nextMedia = null;
+            let frameLoaded = false;
             
-            // Определяем тип медиа (изображение или видео) и создаем элемент
-            function createMediaElement(index) {
-                // Проверим сначала наличие видео
-                const videoElement = document.createElement('video');
-                videoElement.src = `images/${prefix}${index}.mp4`;
-                videoElement.muted = true; // Видео будет без звука
-                videoElement.loop = true;
-                videoElement.playsInline = true;
+            // Создаем локальную очередь для этого фрейма
+            let localQueue = [];
+            
+            // Инициализируем локальную очередь со всеми индексами кроме текущего
+            function initializeLocalQueue() {
+                localQueue = [];
+                for (let i = 1; i <= totalMedia; i++) {
+                    if (i !== currentIndex) {
+                        localQueue.push(i);
+                    }
+                }
+                // Перемешиваем очередь
+                for (let i = localQueue.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [localQueue[i], localQueue[j]] = [localQueue[j], localQueue[i]];
+                }
+            }
+            
+            // Получаем следующий уникальный индекс
+            function getNextUniqueIndex() {
+                // Если локальная очередь пуста, инициализируем заново
+                if (localQueue.length === 0) {
+                    initializeLocalQueue();
+                }
                 
+                // Получаем индекс, который не используется в других фреймах
+                let nextIndex = null;
+                let attempts = 0;
+                const maxAttempts = localQueue.length;
+                
+                while (attempts < maxAttempts) {
+                    const candidateIndex = localQueue.shift();
+                    
+                    // Проверяем, не используется ли этот индекс в других фреймах
+                    if (!usedIndicesGlobal.includes(candidateIndex)) {
+                        nextIndex = candidateIndex;
+                        break;
+                    } else {
+                        // Если индекс используется, добавляем его в конец очереди
+                        localQueue.push(candidateIndex);
+                    }
+                    attempts++;
+                }
+                
+                // Если не нашли уникальный индекс, берем любой из очереди
+                if (nextIndex === null && localQueue.length > 0) {
+                    nextIndex = localQueue.shift();
+                }
+                
+                // Если все еще null, берем случайный индекс
+                if (nextIndex === null) {
+                    do {
+                        nextIndex = Math.floor(Math.random() * totalMedia) + 1;
+                    } while (nextIndex === currentIndex);
+                }
+                
+                return nextIndex;
+            }
+            
+            // Определяем тип медиа и создаем элемент
+            function createMediaElement(index) {
                 return new Promise((resolve) => {
+                    // Сначала пробуем видео
+                    const videoElement = document.createElement('video');
+                    videoElement.src = `images/${prefix}${index}.mp4`;
+                    videoElement.muted = true;
+                    videoElement.loop = true;
+                    videoElement.playsInline = true;
+                    
+                    const videoTimeout = setTimeout(() => {
+                        // Если видео не загрузилось за 3 секунды, пробуем изображение
+                        tryImage();
+                    }, 3000);
+                    
                     videoElement.onloadeddata = function() {
+                        clearTimeout(videoTimeout);
                         resolve({type: 'video', element: videoElement});
                     };
                     
                     videoElement.onerror = function() {
-                        // Если видео не найдено, пробуем изображение
+                        clearTimeout(videoTimeout);
+                        tryImage();
+                    };
+                    
+                    function tryImage() {
                         const imgElement = document.createElement('img');
                         imgElement.src = `images/${prefix}${index}.jpg`;
                         
+                        const imgTimeout = setTimeout(() => {
+                            // Если и изображение не загружается, используем placeholder
+                            resolve({type: 'placeholder', element: createPlaceholder()});
+                        }, 3000);
+                        
                         imgElement.onload = function() {
+                            clearTimeout(imgTimeout);
                             resolve({type: 'image', element: imgElement});
                         };
                         
                         imgElement.onerror = function() {
-                            // Если и изображение не найдено, возвращаем null
-                            resolve({type: null, element: null});
+                            clearTimeout(imgTimeout);
+                            resolve({type: 'placeholder', element: createPlaceholder()});
                         };
-                    };
+                    }
                     
                     // Попытка загрузить видео
                     videoElement.load();
                 });
             }
             
-            // Функция для выбора следующего индекса (избегая дублирования)
-            function getNextUniqueIndex() {
-                // Создаем массив доступных индексов (исключая текущие использованные)
-                let availableIndices = [];
-                for (let i = 1; i <= totalMedia; i++) {
-                    if (!usedIndices.includes(i)) {
-                        availableIndices.push(i);
-                    }
-                }
-                
-                // Если все индексы используются, позволяем выбрать любой, кроме текущего
-                if (availableIndices.length === 0) {
-                    for (let i = 1; i <= totalMedia; i++) {
-                        if (i !== currentIndex) {
-                            availableIndices.push(i);
-                        }
-                    }
-                }
-                
-                // Выбираем случайный индекс из доступных
-                const randomIndex = Math.floor(Math.random() * availableIndices.length);
-                return availableIndices[randomIndex];
+            // Создаем placeholder элемент
+            function createPlaceholder() {
+                const div = document.createElement('div');
+                div.style.cssText = `
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(45deg, #1a1a1a, #333);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #FFD700;
+                    font-family: 'Permanent Marker', cursive;
+                    font-size: 16px;
+                    text-align: center;
+                `;
+                div.textContent = 'MySummerVillage';
+                return div;
             }
             
             // Инициализация первого медиа
             async function initializeMedia() {
+                initializeLocalQueue();
+                
                 const result = await createMediaElement(currentIndex);
-                if (result.type) {
-                    currentMedia = result.element;
-                    mediaType = result.type;
-                    
-                    currentMedia.className = 'active';
-                    frame.appendChild(currentMedia);
-                    
-                    // Если это видео, запускаем его
-                    if (mediaType === 'video') {
-                        currentMedia.play().catch(e => console.error("Не удалось воспроизвести видео:", e));
-                    }
-                    
-                    // Создаем следующий элемент (пока скрытый)
-                    nextMedia = document.createElement(mediaType === 'video' ? 'video' : 'img');
-                    nextMedia.className = 'next';
-                    if (mediaType === 'video') {
-                        nextMedia.muted = true;
-                        nextMedia.loop = true;
-                        nextMedia.playsInline = true;
-                    }
-                    frame.appendChild(nextMedia);
-                    
-                    // Запускаем ротацию
-                    setTimeout(rotateMedia, 5000 + Math.random() * 2000);
+                currentMedia = result.element;
+                mediaType = result.type;
+                
+                currentMedia.className = 'active';
+                frame.appendChild(currentMedia);
+                frame.classList.add('loaded');
+                frameLoaded = true;
+                
+                // Если это видео, запускаем его
+                if (mediaType === 'video') {
+                    currentMedia.play().catch(e => console.log("Видео не может быть воспроизведено автоматически"));
                 }
+                
+                // Создаем следующий элемент
+                const nextIndex = getNextUniqueIndex();
+                const nextResult = await createMediaElement(nextIndex);
+                nextMedia = nextResult.element;
+                nextMedia.className = 'next';
+                frame.appendChild(nextMedia);
+                
+                // Запускаем ротацию
+                setTimeout(rotateMedia, 4000 + Math.random() * 3000);
             }
             
             // Функция для смены медиа
             async function rotateMedia() {
-                // Удаляем текущий индекс из общего списка
-                const currentPosition = usedIndices.indexOf(currentIndex);
-                if (currentPosition > -1) {
-                    usedIndices.splice(currentPosition, 1);
+                if (!frameLoaded) return;
+                
+                // Удаляем текущий индекс из глобального списка
+                const globalIndex = usedIndicesGlobal.indexOf(currentIndex);
+                if (globalIndex > -1) {
+                    usedIndicesGlobal.splice(globalIndex, 1);
                 }
                 
-                // Выбираем новый уникальный индекс
+                // Выбираем новый индекс
                 currentIndex = getNextUniqueIndex();
+                usedIndicesGlobal.push(currentIndex);
                 
-                // Добавляем новый индекс в список используемых
-                usedIndices.push(currentIndex);
-                
-                // Определяем тип нового медиа
+                // Обновляем nextMedia для нового индекса
                 const result = await createMediaElement(currentIndex);
-                if (result.type) {
-                    // Если тип медиа изменился, меняем элемент
-                    if (result.type !== mediaType) {
-                        nextMedia.remove();
-                        nextMedia = result.element;
+                
+                // Удаляем старый nextMedia и создаем новый
+                if (nextMedia && nextMedia.parentNode) {
+                    nextMedia.remove();
+                }
+                
+                nextMedia = result.element;
+                nextMedia.className = 'next';
+                frame.appendChild(nextMedia);
+                
+                // Анимация смены
+                currentMedia.className = 'fade-out';
+                nextMedia.className = 'fade-in';
+                
+                // Останавливаем текущее видео
+                if (currentMedia.tagName === 'VIDEO') {
+                    currentMedia.pause();
+                }
+                
+                // Запускаем новое видео
+                if (nextMedia.tagName === 'VIDEO') {
+                    nextMedia.play().catch(e => console.log("Видео не может быть воспроизведено автоматически"));
+                }
+                
+                // Переключаем медиа после анимации
+                setTimeout(() => {
+                    if (currentMedia && currentMedia.parentNode) {
+                        currentMedia.remove();
+                    }
+                    
+                    currentMedia = nextMedia;
+                    currentMedia.className = 'active';
+                    
+                    // Готовим следующий элемент
+                    const nextIndex = getNextUniqueIndex();
+                    createMediaElement(nextIndex).then(nextResult => {
+                        nextMedia = nextResult.element;
                         nextMedia.className = 'next';
                         frame.appendChild(nextMedia);
-                        mediaType = result.type;
-                    } else {
-                        // Иначе просто обновляем источник
-                        if (mediaType === 'video') {
-                            nextMedia.src = `images/${prefix}${currentIndex}.mp4`;
-                            nextMedia.load();
-                        } else {
-                            nextMedia.src = `images/${prefix}${currentIndex}.jpg`;
-                        }
-                    }
+                    });
                     
-                    // Добавляем классы для анимации
-                    currentMedia.className = 'fade-out';
-                    nextMedia.className = 'fade-in';
-                    
-                    // Если текущее медиа видео, останавливаем его
-                    if (currentMedia.tagName === 'VIDEO') {
-                        currentMedia.pause();
-                    }
-                    
-                    // Если новое медиа видео, запускаем его
-                    if (nextMedia.tagName === 'VIDEO') {
-                        nextMedia.play().catch(e => console.error("Не удалось воспроизвести видео:", e));
-                    }
-                    
-                    // Переключаем медиа после завершения анимации
-                    setTimeout(() => {
-                        // Меняем местами ссылки на медиа
-                        let temp = currentMedia;
-                        currentMedia = nextMedia;
-                        nextMedia = temp;
-                        
-                        // Сбрасываем классы
-                        currentMedia.className = 'active';
-                        nextMedia.className = 'next';
-                        
-                        // Запускаем следующую ротацию
-                        setTimeout(rotateMedia, 5000 + Math.random() * 2000);
-                    }, 1000);
-                } else {
-                    // Если медиа не найдено, пробуем еще раз
-                    setTimeout(rotateMedia, 1000);
-                }
+                    // Запускаем следующую ротацию
+                    setTimeout(rotateMedia, 4000 + Math.random() * 3000);
+                }, 1000);
             }
             
             // Запускаем инициализацию
@@ -486,13 +623,9 @@
         }
         
         // Настраиваем ротацию для каждой рамки
-        // Предположим, что у нас всего 10 медиа-файлов (изображения и/или видео)
-        const totalCommunityMedia = 10; // Измените это число при добавлении большего количества медиа
+        const totalCommunityMedia = 10;
+        let usedIndicesGlobal = [];
         
-        // Список для отслеживания используемых индексов (чтобы избежать дублирования)
-        let usedIndices = [];
-        
-        // Запускаем ротацию с разными начальными индексами
         document.addEventListener('DOMContentLoaded', () => {
             // Выбираем три разных начальных индекса
             let indices = [];
@@ -500,14 +633,14 @@
                 const randomIndex = Math.floor(Math.random() * totalCommunityMedia) + 1;
                 if (!indices.includes(randomIndex)) {
                     indices.push(randomIndex);
-                    usedIndices.push(randomIndex); // Добавляем в список используемых
+                    usedIndicesGlobal.push(randomIndex);
                 }
             }
             
-            // Запускаем ротацию для каждой рамки
-            setupMediaRotation('frame1', 'community', totalCommunityMedia, indices[0], usedIndices);
-            setupMediaRotation('frame2', 'community', totalCommunityMedia, indices[1], usedIndices);
-            setupMediaRotation('frame3', 'community', totalCommunityMedia, indices[2], usedIndices);
+            // Запускаем ротацию для каждой рамки с задержкой
+            setTimeout(() => setupMediaRotation('frame1', 'community', totalCommunityMedia, indices[0], usedIndicesGlobal), 500);
+            setTimeout(() => setupMediaRotation('frame2', 'community', totalCommunityMedia, indices[1], usedIndicesGlobal), 1000);
+            setTimeout(() => setupMediaRotation('frame3', 'community', totalCommunityMedia, indices[2], usedIndicesGlobal), 1500);
         });
     </script>
 </body>
