@@ -114,31 +114,6 @@
             display: inline-block;
         }
 
-        .logo-section::before {
-            content: '🌾';
-            position: absolute;
-            top: -10px;
-            left: -30px;
-            font-size: 2rem;
-            animation: swayWheat 3s ease-in-out infinite;
-            z-index: 10;
-        }
-
-        .logo-section::after {
-            content: '🌾';
-            position: absolute;
-            top: -10px;
-            right: -30px;
-            font-size: 2rem;
-            animation: swayWheat 3s ease-in-out infinite reverse;
-            z-index: 10;
-        }
-
-        @keyframes swayWheat {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(10deg); }
-        }
-
         .logo-section img {
             width: 200px;
             height: 200px;
@@ -164,24 +139,6 @@
                 6px 6px 10px rgba(0,0,0,0.5);
             margin-bottom: 1rem;
             position: relative;
-        }
-
-        .hero-title::before {
-            content: '🏡';
-            position: absolute;
-            left: -60px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 3rem;
-        }
-
-        .hero-title::after {
-            content: '🚜';
-            position: absolute;
-            right: -60px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 3rem;
         }
 
         .hero-description {
@@ -451,24 +408,6 @@
             position: relative;
         }
 
-        .gallery-title::before {
-            content: '🎨';
-            position: absolute;
-            left: -50px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
-        }
-
-        .gallery-title::after {
-            content: '🖼️';
-            position: absolute;
-            right: -50px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
-        }
-
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -505,18 +444,6 @@
         .gallery-frame img.active, .gallery-frame video.active {
             opacity: 1;
             z-index: 2;
-        }
-
-        .gallery-frame img.fade-in, .gallery-frame video.fade-in {
-            opacity: 1;
-            z-index: 2;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .gallery-frame img.fade-out, .gallery-frame video.fade-out {
-            opacity: 0;
-            z-index: 1;
-            transition: opacity 1s ease-in-out;
         }
 
         .loading-placeholder {
@@ -581,16 +508,6 @@
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
-            }
-            
-            .hero-title::before,
-            .hero-title::after {
-                display: none;
-            }
-            
-            .gallery-title::before,
-            .gallery-title::after {
-                display: none;
             }
             
             .wood-card {
@@ -756,50 +673,63 @@
         });
 
         class MediaRotator {
-            constructor(frameId, totalMedia) {
+            constructor(frameId, startIndex = 1) {
                 this.frame = document.getElementById(frameId);
-                this.totalMedia = totalMedia;
-                this.currentMedia = null;
-                this.isRotating = false;
-                this.mediaQueue = [];
+                this.startIndex = startIndex;
+                this.currentIndex = 0;
+                this.mediaElements = [];
                 this.rotationInterval = null;
+                this.loadedCount = 0;
                 
-                this.initializeQueue();
-                this.loadFirstMedia();
+                this.loadAllMedia();
             }
             
-            initializeQueue() {
-                this.mediaQueue = [];
-                for (let i = 1; i <= this.totalMedia; i++) {
-                    this.mediaQueue.push(i);
+            async loadAllMedia() {
+                let index = this.startIndex;
+                let hasMore = true;
+                
+                while (hasMore) {
+                    const element = await this.loadMedia(index);
+                    if (element) {
+                        this.mediaElements.push(element);
+                        this.frame.appendChild(element);
+                        
+                        if (this.mediaElements.length === 1) {
+                            // Показываем первый элемент
+                            element.classList.add('active');
+                            this.frame.classList.add('has-media');
+                            
+                            // Запускаем ротацию если есть несколько элементов
+                            if (this.mediaElements.length > 1) {
+                                this.startRotation();
+                            }
+                        }
+                        
+                        index++;
+                    } else {
+                        hasMore = false;
+                    }
                 }
-                this.shuffleArray(this.mediaQueue);
-            }
-            
-            shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
+                
+                // Если ничего не загрузилось, показываем сообщение
+                if (this.mediaElements.length === 0) {
+                    const placeholder = this.frame.querySelector('.loading-placeholder');
+                    if (placeholder) {
+                        placeholder.textContent = 'Медиафайлы не найдены';
+                    }
                 }
-            }
-            
-            getNextIndex() {
-                if (this.mediaQueue.length === 0) {
-                    this.initializeQueue();
-                }
-                return this.mediaQueue.shift();
             }
             
             async loadMedia(index) {
                 const formats = [
-                    { ext: 'mp4', type: 'video' },
-                    { ext: 'webm', type: 'video' },
-                    { ext: 'mov', type: 'video' },
                     { ext: 'jpg', type: 'image' },
                     { ext: 'jpeg', type: 'image' },
                     { ext: 'png', type: 'image' },
                     { ext: 'gif', type: 'image' },
-                    { ext: 'webp', type: 'image' }
+                    { ext: 'webp', type: 'image' },
+                    { ext: 'mp4', type: 'video' },
+                    { ext: 'webm', type: 'video' },
+                    { ext: 'mov', type: 'video' }
                 ];
                 
                 for (const format of formats) {
@@ -824,4 +754,60 @@
                         video.muted = true;
                         video.loop = true;
                         video.playsInline = true;
-                        video.preload = 'metadata
+                        video.preload = 'metadata';
+                        
+                        video.onloadeddata = () => {
+                            resolve(video);
+                        };
+                        
+                        video.onerror = () => {
+                            reject(new Error('Video load failed'));
+                        };
+                        
+                        // Таймаут для загрузки
+                        setTimeout(() => {
+                            reject(new Error('Video load timeout'));
+                        }, 3000);
+                        
+                    } else {
+                        const img = document.createElement('img');
+                        img.src = url;
+                        
+                        img.onload = () => {
+                            resolve(img);
+                        };
+                        
+                        img.onerror = () => {
+                            reject(new Error('Image load failed'));
+                        };
+                        
+                        // Таймаут для загрузки
+                        setTimeout(() => {
+                            reject(new Error('Image load timeout'));
+                        }, 3000);
+                    }
+                });
+            }
+            
+            startRotation() {
+                if (this.mediaElements.length <= 1) return;
+                
+                this.rotationInterval = setInterval(() => {
+                    this.switchToNext();
+                }, 4000); // Переключение каждые 4 секунды
+            }
+            
+            switchToNext() {
+                if (this.mediaElements.length <= 1) return;
+                
+                // Убираем active класс с текущего элемента
+                this.mediaElements[this.currentIndex].classList.remove('active');
+                
+                // Переходим к следующему индексу
+                this.currentIndex = (this.currentIndex + 1) % this.mediaElements.length;
+                
+                // Добавляем active класс новому элементу
+                const nextElement = this.mediaElements[this.currentIndex];
+                nextElement.classList.add('active');
+                
+                // Если это видео, запускаем его
