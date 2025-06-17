@@ -394,6 +394,119 @@
             opacity: 0.9;
         }
 
+        /* Новые стили для мобильной секции */
+        .mobile-section {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .whats-new-toggle {
+            background: var(--forest-green);
+            border: 2px solid var(--grass-green);
+            border-radius: 10px;
+            padding: 0.8rem 1.5rem;
+            color: var(--cream);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .whats-new-toggle:hover {
+            background: var(--grass-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .whats-new-toggle::after {
+            content: '▼';
+            transition: transform 0.3s ease;
+        }
+
+        .whats-new-toggle.active::after {
+            transform: rotate(180deg);
+        }
+
+        .mobile-download-panel {
+            background: var(--wood-brown);
+            border: 3px solid var(--dark-wood);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 1rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            transform: translateY(-20px);
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            color: var(--cream);
+        }
+
+        .mobile-download-panel.active {
+            transform: translateY(0);
+            opacity: 1;
+            max-height: 600px;
+        }
+
+        .whats-new-title {
+            font-family: 'Russo One', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--golden-yellow);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .whats-new-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .whats-new-list li {
+            padding: 0.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+            position: relative;
+            padding-left: 2rem;
+            line-height: 1.4;
+        }
+
+        .whats-new-list li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+        }
+
+        .mobile-download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem 2.5rem;
+            background: var(--golden-yellow);
+            border: 3px solid var(--dirt-brown);
+            border-radius: 12px;
+            color: var(--dark-wood);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .mobile-download-btn:hover {
+            background: var(--dirt-brown);
+            color: var(--cream);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+        }
+
         .gallery-section {
             margin: 3rem 0;
         }
@@ -544,6 +657,14 @@
             .container {
                 padding: 0 15px;
             }
+
+            .mobile-download-panel {
+                padding: 1.5rem;
+            }
+
+            .whats-new-list li {
+                font-size: 1rem;
+            }
         }
 
         .link-style {
@@ -618,10 +739,28 @@
                 <a href="https://drive.google.com/file/d/1CJHoo0p_y0zBhmqtCH0LjDZMhh1Nvlt8/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="download-btn">
                     💻 Скачать для Windows
                 </a>
-                <div class="platform-label">Или скачайте версию для телефонов:</div>
-                <a href="https://drive.google.com/file/d/1DgE6zkHb4GMFyCVOAnK-qY_ceFEc3ErY/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="download-btn">
-                    📱 Скачать для Android
-                </a>
+                
+                <div class="mobile-section">
+                    <div class="platform-label">Или скачайте версию для телефонов:</div>
+                    
+                    <div class="whats-new-toggle" id="whatsNewToggle">
+                        🔥 Что нового в мобильной версии?
+                    </div>
+                    
+                    <div class="mobile-download-panel" id="mobilePanel">
+                        <h3 class="whats-new-title">Что нового:</h3>
+                        <ul class="whats-new-list">
+                            <li>Магазин тюнинга</li>
+                            <li>Деньги</li>
+                            <li>Тонировка</li>
+                            <li>Исправление багов</li>
+                            <li>Изменения в карте</li>
+                        </ul>
+                        <a href="https://drive.google.com/file/d/1hxbNtH1JkysP4rYx_bhgHy-ppjT8b6Y1/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="mobile-download-btn">
+                            📱 Скачать для Android
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -672,142 +811,4 @@
             window.scrollTo(0, 0);
         });
 
-        class MediaRotator {
-            constructor(frameId, startIndex = 1) {
-                this.frame = document.getElementById(frameId);
-                this.startIndex = startIndex;
-                this.currentIndex = 0;
-                this.mediaElements = [];
-                this.rotationInterval = null;
-                this.loadedCount = 0;
-                
-                this.loadAllMedia();
-            }
-            
-            async loadAllMedia() {
-                let index = this.startIndex;
-                let hasMore = true;
-                
-                while (hasMore) {
-                    const element = await this.loadMedia(index);
-                    if (element) {
-                        this.mediaElements.push(element);
-                        this.frame.appendChild(element);
-                        
-                        if (this.mediaElements.length === 1) {
-                            // Показываем первый элемент
-                            element.classList.add('active');
-                            this.frame.classList.add('has-media');
-                            
-                            // Запускаем ротацию если есть несколько элементов
-                            if (this.mediaElements.length > 1) {
-                                this.startRotation();
-                            }
-                        }
-                        
-                        index++;
-                    } else {
-                        hasMore = false;
-                    }
-                }
-                
-                // Если ничего не загрузилось, показываем сообщение
-                if (this.mediaElements.length === 0) {
-                    const placeholder = this.frame.querySelector('.loading-placeholder');
-                    if (placeholder) {
-                        placeholder.textContent = 'Медиафайлы не найдены';
-                    }
-                }
-            }
-            
-            async loadMedia(index) {
-                const formats = [
-                    { ext: 'jpg', type: 'image' },
-                    { ext: 'jpeg', type: 'image' },
-                    { ext: 'png', type: 'image' },
-                    { ext: 'gif', type: 'image' },
-                    { ext: 'webp', type: 'image' },
-                    { ext: 'mp4', type: 'video' },
-                    { ext: 'webm', type: 'video' },
-                    { ext: 'mov', type: 'video' }
-                ];
-                
-                for (const format of formats) {
-                    try {
-                        const element = await this.tryLoadFormat(index, format);
-                        return element;
-                    } catch (error) {
-                        continue;
-                    }
-                }
-                
-                return null;
-            }
-            
-            tryLoadFormat(index, format) {
-                return new Promise((resolve, reject) => {
-                    const url = `images/community${index}.${format.ext}`;
-                    
-                    if (format.type === 'video') {
-                        const video = document.createElement('video');
-                        video.src = url;
-                        video.muted = true;
-                        video.loop = true;
-                        video.playsInline = true;
-                        video.preload = 'metadata';
-                        
-                        video.onloadeddata = () => {
-                            resolve(video);
-                        };
-                        
-                        video.onerror = () => {
-                            reject(new Error('Video load failed'));
-                        };
-                        
-                        // Таймаут для загрузки
-                        setTimeout(() => {
-                            reject(new Error('Video load timeout'));
-                        }, 3000);
-                        
-                    } else {
-                        const img = document.createElement('img');
-                        img.src = url;
-                        
-                        img.onload = () => {
-                            resolve(img);
-                        };
-                        
-                        img.onerror = () => {
-                            reject(new Error('Image load failed'));
-                        };
-                        
-                        // Таймаут для загрузки
-                        setTimeout(() => {
-                            reject(new Error('Image load timeout'));
-                        }, 3000);
-                    }
-                });
-            }
-            
-            startRotation() {
-                if (this.mediaElements.length <= 1) return;
-                
-                this.rotationInterval = setInterval(() => {
-                    this.switchToNext();
-                }, 4000); // Переключение каждые 4 секунды
-            }
-            
-            switchToNext() {
-                if (this.mediaElements.length <= 1) return;
-                
-                // Убираем active класс с текущего элемента
-                this.mediaElements[this.currentIndex].classList.remove('active');
-                
-                // Переходим к следующему индексу
-                this.currentIndex = (this.currentIndex + 1) % this.mediaElements.length;
-                
-                // Добавляем active класс новому элементу
-                const nextElement = this.mediaElements[this.currentIndex];
-                nextElement.classList.add('active');
-                
-                // Если это видео, запускаем его
+        // Обработчик для раскр
